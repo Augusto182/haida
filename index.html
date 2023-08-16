@@ -1,0 +1,82 @@
+<!DOCTYPE html>
+<html lang="en" ng-app="haidaApp">
+
+  <head>
+    <title>Haida</title>
+    <meta charset="UTF-8">
+    <script src="js/angular.min.js"></script>
+    <script src="js/script.js"></script>
+    <link rel="stylesheet" href="css/styles.css">
+  </head>
+
+  <body ng-controller="mainController">
+
+    <img src="favicon.ico" alt="icon">
+    <h1>HAIDA</h1>
+
+    <form name="main_form" ng-disabled="true">
+    
+    <button ng-click="runBalance()" ng-disabled="syncInProgress"> Cierre </button>
+
+    <button ng-click="runSync()" ng-disabled="syncInProgress"> Guardar </button>
+
+    <div class="main">
+      <div class="left">
+
+        <table id="main">
+          <tr>
+            <th scope="col">Año</th>
+            <th scope="col">Mes</th>
+            <th scope="col">Día</th>
+            <th scope="col">A cuenta</th>
+            <th scope="col">De cuenta</th>
+            <th scope="col">Valor</th>
+            <th scope="col">Descripción</th>
+            <th scope="col"></th>
+          </tr>
+          <tr ng-repeat="item in sheet track by $index" ng-if="!(item.status=='deleted')">
+            <td> {{ item.year }}</td>
+            <td> {{ item.month }}</td>
+            <td> {{ item.day }}</td>
+            <td>
+              <input type="text" name="to_accounts_{{$index}}" ng-model="sheet[$index].toName"  ng-blur="update($index, item)" ng-disabled="syncInProgress"/>
+            </td>
+            <td>
+              <input type="text" name="from_accounts_{{$index}}" ng-model="sheet[$index].fromName" ng-blur="update($index, item)" ng-disabled="syncInProgress"/>
+            </td>
+            <td>
+              <input type="number" name="value_{{$index}}" ng-model="sheet[$index].value" ng-change="update($index, item)" ng-disabled="syncInProgress"/>
+            </td>
+            <td>
+              <input type="text" name="description_{{$index}}" ng-model="sheet[$index].description" ng-disabled="syncInProgress"/>
+            </td>
+            <td>
+              <button ng-click="saveRow($index)" ng-if="$index === (sheet.length - 1)" ng-disabled="syncInProgress">Agregar</button>
+              <button ng-click="saveRow($index)" ng-if="$index !== (sheet.length - 1)" ng-disabled="syncInProgress">Editar</button>
+              <button ng-click="deleteRow($index)" ng-if="$index < (sheet.length - 1)" ng-disabled="syncInProgress"> X </button>
+            </td>
+          </tr>
+        </table>
+      </div>
+
+      <div class="right">
+
+        <table id="accounts">
+          <tr>
+            <th scope="col">Cuentas</th>
+            <th scope="col"></th>
+          </tr>
+          <tr ng-repeat="item in accounts track by $index">
+            <td> {{ item.name }} </td>
+            <td> {{ item.value }} </td>
+          </tr>
+        </table>
+      </div>
+
+    </div>
+
+    </form>
+
+  </body>
+
+</html>
