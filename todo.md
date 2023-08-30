@@ -1,10 +1,12 @@
 [] desarrollar actualización de valores en javascript
      actualmente, no funciona
 
-     --> Toca crear un array que mantenga los valores viejos
+     --> PROBAR DISTINTOS CASOS ACTUALIZACIóN DE VALORES
 
 [] cambiar angularjs to angular
 
+[] bug: ignore mayusculas en comparación
+[] bug: al hacerse el balance por primera véz, se muestra todavía el mes anterior
 [] sincronizar cuentas hijas en backend
 [] limpiar cache de fecha en javascript
 [] hacer paginador
@@ -61,3 +63,5 @@ if ($param === false || $param === null) {
            : ajuste fechas balance e inserción
            : insercion de cuentas hijas
 07 26 | 1h : actualización valores javascript
+08 16 | 30m : Correción value en insert balance, local git repo created
+08 28 | 2h : ajuste actualización valores en tabla, borrado de fila

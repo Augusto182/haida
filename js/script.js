@@ -16,6 +16,7 @@ haidaApp.controller('mainController', function mainController($scope, $http) {
   $scope.year = $scope.date.getFullYear();
   $scope.month = $scope.date.getMonth() + 1;
   $scope.day = $scope.date.getDay();
+  $scope.currentRow = null;
 
   /**
    * Initialization
@@ -179,11 +180,12 @@ haidaApp.controller('mainController', function mainController($scope, $http) {
   /**
    * Delete Row
    */
-  $scope.deleteRow = function (index) {
-    if (confirm("Confirmar eliminación de registro")) {
-      $scope.sheet[index].status = 'deleted';
-      $scope.update($scope.sheet[index], (2 * $scope.sheet[index].value));
-    }
+  $scope.deleteRow = function (index, item) {
+    // if (confirm("Confirmar eliminación de registro")) {
+      item.status = 'deleted';
+      var item_clon = item;
+      $scope.update(index, item_clon);
+    // }
   }
 
   /**
@@ -192,15 +194,23 @@ haidaApp.controller('mainController', function mainController($scope, $http) {
   $scope.update = function (index, item) {
     $scope.sync = true;
 
-    var old_value = $scope.sheet[index].value;
+    console.log('current row', $scope.currentRow);
+
+    var old_value = $scope.currentRow.value;
     var fromName = item.fromName;
-    var oldFromName = $scope.sheet[index].fromName;
+    var oldFromName = $scope.currentRow.fromName;
     var toName = item.toName;
-    var oldToName = $scope.sheet[index].toName;
+    var oldToName = $scope.currentRow.toName;
 
     old_value = old_value == '' ? 0 : parseFloat(old_value);
 
-    $scope.saveRow(index);
+    // Update current value in current row.
+    $scope.currentRow = { ...item };
+
+    // Detect if new row and skip save.
+    if (index !== $scope.sheet.length - 1 && item.status != 'deleted') {
+      $scope.saveRow(index);
+    }
 
     $scope.accounts.forEach(account => {
 
@@ -210,11 +220,24 @@ haidaApp.controller('mainController', function mainController($scope, $http) {
       if (account.name == oldFromName && fromName != oldFromName) {
         account.value = account.value + item.value;
       }
+      if (account.name == fromName && oldFromName == '') {
+        account.value = account.value - item.value + old_value;
+      }
+      if (account.name == fromName && item.status == 'deleted') {
+        account.value = account.value + item.value;
+      }
+
       if (account.name == toName && toName == oldToName) {
         account.value = account.value + item.value - old_value;
       }
       if (account.name == oldToName && toName != oldToName) {
-        account.value = account.value + item.value;
+        account.value = account.value - item.value;
+      }
+      if (account.name == toName && oldToName == '') {
+        account.value = account.value + item.value - old_value;
+      }
+      if (account.name == toName && item.status == 'deleted') {
+        account.value = account.value - item.value;
       }
 
     });
@@ -303,6 +326,24 @@ haidaApp.controller('mainController', function mainController($scope, $http) {
         break;
       }
     }
+  }
+
+  /**
+   * Focus
+   */
+  $scope.focus = function (index, item) {
+    if ($scope.currentIndex != index) {
+      $scope.currentIndex = index;
+      $scope.currentRow = { ...item };
+      console.log('focus current row', $scope.currentRow);
+    }
+  }
+
+  /**
+   * Blur
+   */
+  $scope.blur = function (index, item) {
+    $scope.update(index, item);
   }
 
 });

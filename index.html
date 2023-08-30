@@ -34,26 +34,26 @@
             <th scope="col">Descripción</th>
             <th scope="col"></th>
           </tr>
-          <tr ng-repeat="item in sheet track by $index" ng-if="!(item.status=='deleted')">
+          <tr ng-repeat="item in sheet track by $index" ng-if="item.status !== 'deleted'">
             <td> {{ item.year }}</td>
             <td> {{ item.month }}</td>
             <td> {{ item.day }}</td>
             <td>
-              <input type="text" name="to_accounts_{{$index}}" ng-model="sheet[$index].toName"  ng-blur="update($index, item)" ng-disabled="syncInProgress"/>
+              <input type="text" name="to_accounts_{{$index}}" ng-model="sheet[$index].toName" ng-focus="focus($index, item)"  ng-blur="blur($index, item)" ng-disabled="syncInProgress"/>
             </td>
             <td>
-              <input type="text" name="from_accounts_{{$index}}" ng-model="sheet[$index].fromName" ng-blur="update($index, item)" ng-disabled="syncInProgress"/>
+              <input type="text" name="from_accounts_{{$index}}" ng-model="sheet[$index].fromName" ng-focus="focus($index, item)" ng-blur="blur($index, item)" ng-disabled="syncInProgress"/>
             </td>
             <td>
-              <input type="number" name="value_{{$index}}" ng-model="sheet[$index].value" ng-change="update($index, item)" ng-disabled="syncInProgress"/>
+              <input type="number" name="value_{{$index}}" ng-model="sheet[$index].value" ng-focus="focus($index, item)" ng-change="update($index, item)" ng-disabled="syncInProgress"/>
             </td>
             <td>
-              <input type="text" name="description_{{$index}}" ng-model="sheet[$index].description" ng-disabled="syncInProgress"/>
+              <input type="text" name="description_{{$index}}" ng-model="sheet[$index].description" ng-focus="focus($index, item)" ng-disabled="syncInProgress"/>
             </td>
             <td>
               <button ng-click="saveRow($index)" ng-if="$index === (sheet.length - 1)" ng-disabled="syncInProgress">Agregar</button>
               <button ng-click="saveRow($index)" ng-if="$index !== (sheet.length - 1)" ng-disabled="syncInProgress">Editar</button>
-              <button ng-click="deleteRow($index)" ng-if="$index < (sheet.length - 1)" ng-disabled="syncInProgress"> X </button>
+              <button ng-click="deleteRow($index, item)" ng-if="$index < (sheet.length - 1)" ng-disabled="syncInProgress"> X </button>
             </td>
           </tr>
         </table>
