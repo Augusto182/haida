@@ -34,7 +34,7 @@
             <th scope="col">Descripción</th>
             <th scope="col"></th>
           </tr>
-          <tr ng-repeat="item in sheet track by $index" ng-if="item.status !== 'deleted'">
+          <tr ng-repeat="item in sheet track by $index" ng-if="item.status !== 'deleted'" ng-class="item.status">
             <td> {{ item.year }}</td>
             <td> {{ item.month }}</td>
             <td> {{ item.day }}</td>
@@ -51,8 +51,7 @@
               <input type="text" name="description_{{$index}}" ng-model="sheet[$index].description" ng-focus="focus($index, item)" ng-disabled="syncInProgress"/>
             </td>
             <td>
-              <button ng-click="saveRow($index)" ng-if="$index === (sheet.length - 1)" ng-disabled="syncInProgress">Agregar</button>
-              <button ng-click="saveRow($index)" ng-if="$index !== (sheet.length - 1)" ng-disabled="syncInProgress">Editar</button>
+              <button ng-click="saveRow($index)" ng-disabled="syncInProgress">Guardar</button>
               <button ng-click="deleteRow($index, item)" ng-if="$index < (sheet.length - 1)" ng-disabled="syncInProgress"> X </button>
             </td>
           </tr>

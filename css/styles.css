@@ -15,6 +15,26 @@ body {
   flex: 25%;
 }
 
+.unmodified {
+  background-color: white;
+}
+
+.deleted {
+  background-color: red;
+}
+
+.added {
+  background-color: yellow;
+}
+
+.edited {
+  background-color: orange;
+}
+
+.saved {
+  background-color: green;
+}
+
 [ng-cloak] {
   display: none !important;
 }

@@ -196,7 +196,12 @@ haidaApp.controller('mainController', function mainController($scope, $http) {
 
     console.log('current row', $scope.currentRow);
 
-    var old_value = $scope.currentRow.value;
+    // Skip if item.value is empty
+    if (item.value == '' || item.value === null) {
+      return;
+    }
+
+    var old_value = $scope.currentRow.value ?? 0;
     var fromName = item.fromName;
     var oldFromName = $scope.currentRow.fromName;
     var toName = item.toName;
@@ -217,6 +222,9 @@ haidaApp.controller('mainController', function mainController($scope, $http) {
       if (account.name == fromName && fromName == oldFromName) {
           account.value = account.value - item.value + old_value;
       }
+      if (account.name == fromName && fromName != oldFromName && !account.new) {
+        account.value = account.value - item.value;
+      }
       if (account.name == oldFromName && fromName != oldFromName) {
         account.value = account.value + item.value;
       }
@@ -230,6 +238,9 @@ haidaApp.controller('mainController', function mainController($scope, $http) {
       if (account.name == toName && toName == oldToName) {
         account.value = account.value + item.value - old_value;
       }
+      if (account.name == toName && toName != oldToName && !account.new) {
+        account.value = account.value + item.value;
+      }
       if (account.name == oldToName && toName != oldToName) {
         account.value = account.value - item.value;
       }
@@ -238,6 +249,10 @@ haidaApp.controller('mainController', function mainController($scope, $http) {
       }
       if (account.name == toName && item.status == 'deleted') {
         account.value = account.value - item.value;
+      }
+
+      if (account.new) {
+        account.new = false;
       }
 
     });
@@ -279,9 +294,13 @@ haidaApp.controller('mainController', function mainController($scope, $http) {
           id: $scope.lastAccountId,
           pid: pid,
           name: name,
-          value: value
+          value: value,
+          new: true
         };
         $scope.accounts.push(new_account);
+      }
+      else {
+        account.value = account.value + value;
       }
     });
     return new_account;

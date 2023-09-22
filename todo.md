@@ -1,13 +1,12 @@
-[] desarrollar actualización de valores en javascript
-     actualmente, no funciona
-
-     --> PROBAR DISTINTOS CASOS ACTUALIZACIóN DE VALORES
+[] PROBAR DISTINTOS CASOS ACTUALIZACIóN DE VALORES
+  [] Existe un bug en el conteo al agregar nuevos valores
 
 [] cambiar angularjs to angular
+[] pintar de colores registros segun estado
 
 [] bug: ignore mayusculas en comparación
 [] bug: al hacerse el balance por primera véz, se muestra todavía el mes anterior
-[] sincronizar cuentas hijas en backend
+[] focus onnew row when click en save boton
 [] limpiar cache de fecha en javascript
 [] hacer paginador
 [] delete account
@@ -34,7 +33,6 @@ if ($param === false || $param === null) {
 }
 
 7. almacenar la información en local storage
-5. instalar git
 6. set personal git repo
 7. cambiar plural to/from account(s)
 10. Delete account
@@ -65,3 +63,6 @@ if ($param === false || $param === null) {
 07 26 | 1h : actualización valores javascript
 08 16 | 30m : Correción value en insert balance, local git repo created
 08 28 | 2h : ajuste actualización valores en tabla, borrado de fila
+08 29 | 2h : ajuste actualización valores en tabla, pintura de registros
+09 21 | 30m : calculo valor cuenta compuesta, bug fixes
+09 22 | 2h : almacenamientos cuentas con hijos en backend

@@ -167,17 +167,19 @@ function insert_accounts($conn, $item, &$new_accounts) {
   $accounts = get_store('accounts_names') ?? [];
   $new_account = FALSE;
   if (!array_key_exists($item->toName, $accounts)) {
-    if ($new_account = create_account($conn, $item->toName)) {
-      $new_account['value'] = $item->value;
-      $accounts[$item->toName] = $new_account['id'];
-      $new_accounts[] = $new_account;
+    if ($new_accounts_partial = create_account($conn, $item->toName, $item->value)) {
+      foreach ($new_accounts_partial as $new_account) {
+        $accounts[$new_account['name']] = $new_account['id'];
+      }
+      $new_accounts = $new_accounts + $new_accounts_partial;
     }
   }
   if (!array_key_exists($item->fromName, $accounts)) {
-    if ($new_account = create_account($conn, $item->fromName)) {
-      $new_account['value'] = -1 * $item->value;
-      $accounts[$item->fromName] = $new_account['id'];
-      $new_accounts[] = $new_account;
+    if ($new_accounts_partial = create_account($conn, $item->fromName, $item->value)) {
+      foreach ($new_accounts_partial as $new_account) {
+        $accounts[$item->fromName] = $new_account['id'];
+      }
+      $new_accounts = $new_accounts + $new_accounts_partial;
     }
   }
   set_store('accounts_names', $accounts);
@@ -263,21 +265,41 @@ function get_store($key) {
 /**
  * Insert
  */
-function create_account($conn, $account_name) {
-  $names = explode(' ', $account_name);
+function create_account($conn, $name, $value) {
+  $accounts = get_store('accounts_names') ?? [];
+  $names = explode(' ', $name);
+  $pid = 0;
+  $name = '';
+  $new_accounts = [];
+  $last_account_id = end($accounts);
+
   $stmt = $conn->prepare("INSERT INTO accounts (pid, name) VALUES (?, ?)");
-  foreach ($names as $name) {
-    $pid = 0;
+  foreach ($names as $key => $piece) {
+
+    if ($key > 0) {
+      $pid = $last_account_id;
+      $name .= ' ';
+    }
+    $name .= $piece;
     $stmt->bind_param('is', $pid, $name);
-    if ($stmt->execute()) {
-      return [
-        'id' => $conn->insert_id,
-        'pid' => $pid,
-        'name' => $name,
-      ];
-    };
+    if (!array_key_exists($name, $accounts)) {
+      if ($stmt->execute()) {
+
+        $new_account = [
+          'id' => $conn->insert_id,
+          'pid' => $pid,
+          'name' => $name,
+          'value'=> $value,
+        ];
+        $new_accounts[] = $new_account;
+        $last_account_id = $conn->insert_id;
+      }
+    }
+    else {
+      $last_account_id = $accounts[$name];
+    }
   }
-  return FALSE;
+  return $new_accounts;
 }
 
 /**
@@ -325,7 +347,25 @@ function addAccountValuesFromSheet($conn, $account_id, &$value) {
       }
     }
   }
-  return $value;
+  $children = getAccountChildren($conn, $account_id);
+  foreach ($children as $child) {
+    addAccountValuesFromSheet($conn, $child['id'], $value);
+  }
+}
+
+/**
+ * Get Account Children
+ */
+function getAccountChildren($conn, $account_id) {
+  $stmt = $conn->prepare("SELECT * FROM accounts WHERE pid=?");
+  $stmt->bind_param('i', $account_id);
+  $stmt->execute();
+  $result = $stmt->get_result();
+  $accountsArray = array();
+  while ($row = $result->fetch_assoc()) {
+    $accountsArray[] = $row;
+  }
+  return $accountsArray;
 }
 
 /**
