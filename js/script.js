@@ -222,32 +222,32 @@ haidaApp.controller('mainController', function mainController($scope, $http) {
       if (account.name == fromName && fromName == oldFromName) {
           account.value = account.value - item.value + old_value;
       }
-      if (account.name == fromName && fromName != oldFromName && !account.new) {
+      else if (account.name == fromName && fromName != oldFromName && (account.hasOwnProperty('new') && !account.new)) {
         account.value = account.value - item.value;
       }
-      if (account.name == oldFromName && fromName != oldFromName) {
+      else if (account.name == oldFromName && fromName != oldFromName) {
         account.value = account.value + item.value;
       }
-      if (account.name == fromName && oldFromName == '') {
+      else if (account.name == fromName && oldFromName == '') {
         account.value = account.value - item.value + old_value;
       }
-      if (account.name == fromName && item.status == 'deleted') {
+      else if (account.name == fromName && item.status == 'deleted') {
         account.value = account.value + item.value;
       }
 
       if (account.name == toName && toName == oldToName) {
         account.value = account.value + item.value - old_value;
       }
-      if (account.name == toName && toName != oldToName && !account.new) {
+      else if (account.name == toName && toName != oldToName && (account.hasOwnProperty('new') && !account.new)) {
         account.value = account.value + item.value;
       }
-      if (account.name == oldToName && toName != oldToName) {
+      else if (account.name == oldToName && toName != oldToName) {
         account.value = account.value - item.value;
       }
-      if (account.name == toName && oldToName == '') {
+      else if (account.name == toName && oldToName == '') {
         account.value = account.value + item.value - old_value;
       }
-      if (account.name == toName && item.status == 'deleted') {
+      else if (account.name == toName && item.status == 'deleted') {
         account.value = account.value - item.value;
       }
 

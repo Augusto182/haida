@@ -1,5 +1,8 @@
+[] hacer una función para actualizar los valores de las cuentas pare en update, javascript
+-- seria bueno que cada account supiera cuales su padre, de hecho, lo sabe.
+
+[] check github repository, push dsent work
 [] PROBAR DISTINTOS CASOS ACTUALIZACIóN DE VALORES
-  [] Existe un bug en el conteo al agregar nuevos valores
 
 [] cambiar angularjs to angular
 [] pintar de colores registros segun estado
@@ -66,3 +69,4 @@ if ($param === false || $param === null) {
 08 29 | 2h : ajuste actualización valores en tabla, pintura de registros
 09 21 | 30m : calculo valor cuenta compuesta, bug fixes
 09 22 | 2h : almacenamientos cuentas con hijos en backend
+09 25 | 30m : Corregido bug
