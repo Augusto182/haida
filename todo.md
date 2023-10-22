@@ -1,8 +1,5 @@
-[] hacer una función para actualizar los valores de las cuentas pare en update, javascript
--- seria bueno que cada account supiera cuales su padre, de hecho, lo sabe.
-
-[] check github repository, push dsent work
-[] PROBAR DISTINTOS CASOS ACTUALIZACIóN DE VALORES
+[] posibilidad de ordenar la lista de cuentas (order property)
+   drag and drop ?
 
 [] cambiar angularjs to angular
 [] pintar de colores registros segun estado
@@ -70,3 +67,56 @@ if ($param === false || $param === null) {
 09 21 | 30m : calculo valor cuenta compuesta, bug fixes
 09 22 | 2h : almacenamientos cuentas con hijos en backend
 09 25 | 30m : Corregido bug
+10 21 | 60m : Analizando problema actualización cuentas
+10 22 | 120m : Refactorizacion actualización de cuentas
+
+
+
+====
+
+Si TOA o FRA o VALOR cambian
+
+  Si TOA cambia
+    Validar si TOA Existe
+    Si TOA es nuevo
+      Crear TOA con VALOR o 0 si VALOR null
+    Fin si
+    Si TOA existe
+      Agregar VALOR al TOA
+    Fin si
+
+    Obtener padre de TOA
+    Si padreTOA existe
+      Agregar VALOR a padreTOA 
+      === Iterativamente actualizar linaje 
+    Fin si
+
+    Restar VALOR a oldTOA
+    Si padreOldTOA existe
+      Restar VALOR a padreOldTOA 
+      === Iterativamente actualizar linaje 
+    Fin si
+
+  Fin Si
+
+  Si FRA cambia, lo mismo que con TOA, invirtiendo operaciones Suma/Resta
+  Fin Si
+
+  Si VALOR cambia
+    Si TOA es distinto a ''
+      Restar oldVALUE a TOA, Sumar VALUE a TOA
+      Obtener padre de TOA
+      Si padreTOA existe
+        Restar oldVALUE a padreTOA, Sumar VALUE a padreTOA 
+        === Iterativamente actualizar linaje
+      Fin si
+    Fin Si
+
+    Si FRA es distinto a ''
+      lo mismo que con TOA, invirtiendo operaciones Suma/Resta
+    Fin Si
+  Fin Si
+
+  Actualizar registro de item actual con los cambios realizados
+
+Fin Si

@@ -273,7 +273,7 @@ function create_account($conn, $name, $value) {
   $new_accounts = [];
   $last_account_id = end($accounts);
 
-  $stmt = $conn->prepare("INSERT INTO accounts (pid, name) VALUES (?, ?)");
+  $stmt = $conn->prepare("INSERT INTO accounts (pid, name, order) VALUES (?, ?, 0)");
   foreach ($names as $key => $piece) {
 
     if ($key > 0) {

@@ -37,15 +37,17 @@
           <tr ng-repeat="item in sheet track by $index" ng-if="item.status !== 'deleted'" ng-class="item.status">
             <td> {{ item.year }}</td>
             <td> {{ item.month }}</td>
-            <td> {{ item.day }}</td>
             <td>
-              <input type="text" name="to_accounts_{{$index}}" ng-model="sheet[$index].toName" ng-focus="focus($index, item)"  ng-blur="blur($index, item)" ng-disabled="syncInProgress"/>
+              <input type="text" name="day_{{$index}}" ng-model="sheet[$index].day" ng-focus="focus($index, item)" ng-disabled="syncInProgress" size="2" maxlength="2"/>
             </td>
             <td>
-              <input type="text" name="from_accounts_{{$index}}" ng-model="sheet[$index].fromName" ng-focus="focus($index, item)" ng-blur="blur($index, item)" ng-disabled="syncInProgress"/>
+              <input type="text" name="to_accounts_{{$index}}" ng-model="sheet[$index].toName" ng-focus="focus($index, item)"  ng-blur="updateDebit($index, item)" ng-disabled="syncInProgress"/>
             </td>
             <td>
-              <input type="number" name="value_{{$index}}" ng-model="sheet[$index].value" ng-focus="focus($index, item)" ng-change="update($index, item)" ng-disabled="syncInProgress"/>
+              <input type="text" name="from_accounts_{{$index}}" ng-model="sheet[$index].fromName" ng-focus="focus($index, item)" ng-blur="updateCredit($index, item)" ng-disabled="syncInProgress"/>
+            </td>
+            <td>
+              <input type="number" name="value_{{$index}}" ng-model="sheet[$index].value" ng-focus="focus($index, item)" ng-change="updateValue($index, item)" ng-disabled="syncInProgress"/>
             </td>
             <td>
               <input type="text" name="description_{{$index}}" ng-model="sheet[$index].description" ng-focus="focus($index, item)" ng-disabled="syncInProgress"/>
@@ -65,7 +67,7 @@
             <th scope="col">Cuentas</th>
             <th scope="col"></th>
           </tr>
-          <tr ng-repeat="item in accounts track by $index">
+          <tr ng-repeat="item in accounts | orderBy:order track by $index">
             <td> {{ item.name }} </td>
             <td> {{ item.value }} </td>
           </tr>
